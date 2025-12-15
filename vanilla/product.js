@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const productsContainer = document.querySelector(".products");
+  const productsContainer = document.querySelector("#products-container");
 
   fetch("https://fakestoreapi.com/products")
     .then((res) => res.json())
