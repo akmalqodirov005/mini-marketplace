@@ -17,24 +17,31 @@ const CartList = () => {
     };
 
     loadCart();
+  }, []);
 
-    const handleAddToCart = (e) => {
-      const newItem = { ...e.detail, quantity: 1, price: Number(e.detail.price) };
-      setCartItems((prev) => {
-        const exist = prev.find((i) => i.id === newItem.id);
-        const updatedCart = exist
-          ? prev.map((i) =>
-              i.id === newItem.id ? { ...i, quantity: i.quantity + 1 } : i
-            )
-          : [...prev, newItem];
-        localStorage.setItem("cart", JSON.stringify(updatedCart));
-        return updatedCart;
-      });
+  useEffect(() => {
+    const handleCartUpdate = (event) => {
+      const updatedCart = event.detail;
+      const cartWithQuantity = updatedCart.map((item) => ({
+        ...item,
+        quantity: item.quantity || 1,
+        price: Number(item.price),
+      }));
+      setCartItems(cartWithQuantity);
     };
 
-    window.addEventListener("add-to-cart", handleAddToCart);
-    return () => window.removeEventListener("add-to-cart", handleAddToCart);
+    window.addEventListener("cartUpdated", handleCartUpdate);
+    
+    return () => {
+      window.removeEventListener("cartUpdated", handleCartUpdate);
+    };
   }, []);
+
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      localStorage.setItem("cart", JSON.stringify(cartItems));
+    }
+  }, [cartItems]);
 
   const updateQuantity = (id, quantity) => {
     if (quantity < 1) return;
@@ -61,20 +68,20 @@ const CartList = () => {
       {cartItems.length === 0 ? (
         <p>Cart is empty</p>
       ) : (
-        cartItems.map((item) => (
-          <CartItem
-            key={item.id}
-            item={item}
-            updateQuantity={updateQuantity}
-            removeFromCart={removeFromCart}
-          />
-        ))
-      )}
-      {cartItems.length > 0 && (
-        <div className="cart-summary">
-          <p>Total items: {totalItems}</p>
-          <p>Total price: ${totalPrice}</p>
-        </div>
+        <>
+          {cartItems.map((item) => (
+            <CartItem
+              key={item.id}
+              item={item}
+              updateQuantity={updateQuantity}
+              removeFromCart={removeFromCart}
+            />
+          ))}
+          <div className="cart-summary">
+            <p>Total items: {totalItems}</p>
+            <p>Total price: ${totalPrice}</p>
+          </div>
+        </>
       )}
     </div>
   );

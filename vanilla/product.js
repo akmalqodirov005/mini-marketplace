@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   fetch("https://fakestoreapi.com/products")
     .then((res) => res.json())
     .then((products) => displayProducts(products))
-    .catch((err) => console.error(err));
+    .catch((err) => console.error("Error loading products:", err));
 
   function displayProducts(products) {
     products.forEach((product) => {
@@ -19,14 +19,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const btn = card.querySelector("button");
       btn.addEventListener("click", () => {
-        const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
-        savedCart.push(product);
-        localStorage.setItem("cart", JSON.stringify(savedCart));
-
-        alert(product.title + " added to cart");
+        addToCart(product);
       });
 
       productsContainer.appendChild(card);
     });
+  }
+
+  function addToCart(product) {
+    const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    
+    const existingItem = savedCart.find(item => item.id === product.id);
+    
+    let updatedCart;
+    if (existingItem) {
+      updatedCart = savedCart.map(item => 
+        item.id === product.id 
+          ? { ...item, quantity: (item.quantity || 1) + 1 }
+          : item
+      );
+    } else {
+      updatedCart = [...savedCart, { ...product, quantity: 1 }];
+    }
+    
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+    window.dispatchEvent(new CustomEvent("cartUpdated", { 
+      detail: updatedCart 
+    }));
+
+    alert(product.title + " added to cart!");
   }
 });
