@@ -1,10 +1,12 @@
 # Mini Marketplace
 
+## Loyihaning afzalliklari
+	•	Vanilla JS bilan API integratsiyasi orqali tezkor mahsulot yuklash
+	•	React bilan interaktiv cart yaratish
+	•	Oson kengaytirish va boshqa komponentlar bilan integratsiya qilish
+
 ## Ism
 Akmal Qodirov
-
-## Vazifa qancha vaqt oldi
-Vazifani bajarish uchun taxminan **5 soat** vaqt ketdi.
 
 ## Interface
 
@@ -19,9 +21,6 @@ Third:
 
 Fourth:  
 ![Fourth](./src/assets/fourth.png)
-
-## Qiyin bo‘lgan joylar
-Eng qiyin bo‘lgan jihat — **vanilla JavaScript bilan React’ni birga ishlatish** bo‘ldi. Chunki oldin barcha funksionallikni faqat React’ning o‘zida qilardim, bu safar esa vanilla JS bilan integratsiya qilishga to‘g‘ri keldi.
 
 ## Demo havolasi
 [Demo saytni ko‘rish](https://akmalqodirov005mini-marketplace.netlify.app)
